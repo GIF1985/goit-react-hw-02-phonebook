@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './ContactForm.module.css';
 
-const ContactForm = ({ onSubmit }) => {
+const ContactForm = ({ contacts, onSubmit }) => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
@@ -19,7 +19,22 @@ const ContactForm = ({ onSubmit }) => {
       return;
     }
 
-    onSubmit({ name, number });
+    if (name.length < 2 || name.length > 15) {
+      alert('Please enter a name between 2 and 15 characters.');
+      return;
+    }
+
+    const existingContact =
+      contacts &&
+      contacts.find(
+        contact => contact.name.toLowerCase() === name.toLowerCase()
+      );
+    if (existingContact) {
+      alert('Contact already exists.');
+      return;
+    }
+
+    onSubmit({ name: name.toLowerCase(), number });
     setName('');
     setNumber('');
   };
